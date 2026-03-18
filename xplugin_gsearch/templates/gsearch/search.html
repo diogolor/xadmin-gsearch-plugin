@@ -5,8 +5,6 @@
 
 {% block content %}
 <!--content-->
-{% if gsearch.views %}
-{% endif %}
 <h6 class="my-1">
   <span class="text-success">{{ gsearch.count }}</span>
   <span class="text-muted">{% trans 'results found' %}</span>
@@ -15,10 +13,10 @@
   {% for search in gsearch.views %}
     {% if search.active %}
     <div class="col mb-3">
-      <div class="list-group list-group-media h-100 {% if search.view.get_total > 0 %}border border-2 border-primary rounded{% endif %}">
+      <div class="list-group list-group-media h-100 {% if search.total_count > 0 %}border border-2 border-primary rounded{% endif %}">
         <a href="{{ search.url }}" class="list-group-item list-group-item-action list-item flex-fill p-2">
           <div class="media align-items-center flex-fill">
-            <span class="fa-stack text-{% if search.view.get_total > 0 %}primary{% else %}muted{% endif %} mr-2">
+            <span class="fa-stack text-{% if search.total_count > 0 %}primary{% else %}muted{% endif %} mr-2">
               <i class="fas fa-square fa-stack-2x"></i>
               <i class="fas fa-search fa-stack-1x fa-inverse"></i>
             </span>
@@ -26,7 +24,7 @@
               <div class="ml-2 list-item-title">{{ search.view.verbose_name }}</div>
               <div class="ml-auto">
                 <span class="text-muted font-italic mr-1">
-                  <strong><span class="text-primary">{{ search.view.get_total }}</span></strong> {% trans 'results' %}
+                  <strong><span class="text-primary">{{ search.total_count }}</span></strong> {% trans 'results' %}
                 </span>
                 <i class="fa fa-chevron-right text-muted"></i>
               </div>

@@ -108,6 +108,7 @@ class GlobalSearchView(CommSearchView):
 			if self.request_method == "get" and not searching:
 				checked &= search_view.model_filter_active
 			active = search_view.has_view_permission() and checked and bool(self.search_text)
+			current_total = search_view.get_total() if active else 0
 			query_string = search_view.get_query_string({
 				SEARCH_VAR: self.search_text
 			}, remove=["mdl", "shr"])
@@ -118,17 +119,21 @@ class GlobalSearchView(CommSearchView):
 				'view': search_view,
 				'url': url,
 				'checked': checked,
-				'active': active
+				'active': active,
+				'total_count': current_total
 			})
 			if active:
-				results_count += search_view.get_total()
+				results_count += current_total
+
+		sorted_views = sorted(views, key=lambda x: x['total_count'], reverse=True)
+
 		context['gsearch'] = {
 			'url': self.get_admin_url("gsearch"),
 			'title': self.search_title,
 			'search_param': SEARCH_VAR,
 			'search_text': self.search_text,
 			'count': results_count,
-			'views': views
+			'views': sorted_views
 		}
 		response = TemplateResponse(
 			request,
